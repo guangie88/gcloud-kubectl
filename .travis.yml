@@ -1,0 +1,39 @@
+language: bash
+
+env:
+  global:
+  - IMAGE_NAME=${DOCKER_USERNAME}/gcloud-kubectl
+
+# Spark version is derived at runtime dynamically
+matrix:
+  include:
+  - services: docker
+    env:
+    - CLOUD_SDK_VERSION=latest
+  - services: docker
+    env:
+    - CLOUD_SDK_VERSION=slim
+  - services: docker
+    env:
+    - CLOUD_SDK_VERSION=alpine
+
+before_script:
+- docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+
+script:
+# Build step
+- |-
+  docker build . -f Dockerfile \
+    --build-arg CLOUD_SDK_VERSION="${CLOUD_SDK_VERSION}" \
+    -t "${IMAGE_NAME}:${CLOUD_SDK_VERSION}"
+# Verification step
+- which kubectl >/dev/null
+# Push step
+- |-
+  if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+    docker push "${IMAGE_NAME}:${CLOUD_SDK_VERSION}"
+  fi
+
+branches:
+  only:
+  - master
