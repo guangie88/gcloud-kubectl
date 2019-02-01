@@ -1,0 +1,8 @@
+ARG CLOUD_SDK_VERSION
+FROM google/cloud-sdk:${CLOUD_SDK_VERSION}
+
+RUN set -euo pipefail; \
+    apt-get update; \
+    apt-get install kubectl -y --no-install-recommends; \
+    rm -rf /var/lib/apt/lists/*; \
+    :
