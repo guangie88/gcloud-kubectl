@@ -1,4 +1,7 @@
 ARG CLOUD_SDK_VERSION
 FROM google/cloud-sdk:${CLOUD_SDK_VERSION}
 
-RUN gcloud components install kubectl -q
+RUN set -euo pipefail && \
+    apk add --no-cache jq; \
+    gcloud components install kubectl -q; \
+    :
