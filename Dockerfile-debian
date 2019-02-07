@@ -3,6 +3,6 @@ FROM google/cloud-sdk:${CLOUD_SDK_VERSION}
 
 RUN set -eu && \
     apt-get update; \
-    apt-get install kubectl -y --no-install-recommends; \
+    apt-get install jq kubectl -y --no-install-recommends; \
     rm -rf /var/lib/apt/lists/*; \
     :
